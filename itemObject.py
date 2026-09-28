@@ -1,5 +1,3 @@
-
-
 class item:
 
     def __init__(self,name, category,quantity):
@@ -10,11 +8,8 @@ class item:
         return f"{self.name}, {self.category}, {self.quantity}"
 
 inventory = [
-    item("screwdriver","tool", 1), 
-    item("hammer","tool", 2)
+  #  item("screwdriver","tool", 1), 
+  #  item("hammer","tool", 2)
     ]
 
 
-def save_list_items(inv):
-    #TODO: save the object into a file
-    pass
