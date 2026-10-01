@@ -1,15 +1,14 @@
 import itemObject as io
 import difflib
 inventoryFile = "inventory.txt"
-
+if not inventoryFile:
+    f = open(inventoryFile, "a")
+    pass
 def save_list_items():
-    print("SAVE FUNCTION STARTED")
 
     with open(inventoryFile, "w") as f:
-        print("FILE OPENED")
 
         for x in io.inventory:
-            print("SAVE LOOP RAN")
             f.write(x.name + "|" + x.category + "|" + str(x.quantity) + "\n")
 
 def load_list_items(): #TODO add functionality to read off of various inventories - not required, for fun
@@ -17,7 +16,6 @@ def load_list_items(): #TODO add functionality to read off of various inventorie
         print("FILE READ")
 
         for line in f:
-            print("LOAD LOOP RAN")
            # line = f.readline()
             parts = line.split("|")
             io.inventory.append(io.item(parts[0],parts[1], int(parts[2])))
@@ -35,32 +33,54 @@ def search_inventory():
     obType = input("enter the filter: ")
     search = input("Search for: ")
     if obType == "1": #name
-        close_matches = difflib.get_close_matches(search,io.inventory.name)
+        close_matches = difflib.get_close_matches(search, [item.name for item in io.inventory])
+        print(close_matches)
         pass
     elif obType == "2": #Category
-        pass
+        close_matches = difflib.get_close_matches(search, [item.category for item in io.inventory])
+        print(close_matches)
     elif obType == "3": #Quantity
-        pass
+        close_matches = difflib.get_close_matches(search, [item.quantity for item in io.inventory])
+        print(close_matches)
     else:
         print("Invalid option.")
     pass
+def update_quantity():
+    changed = int(input("input item entry number: "))
+    newNumber = int(input("input the new quantity: "))
+    if changed < 1 or changed > len(io.inventory):
+        print("That item number does not exist")
+        return False
 
+    io.inventory[changed - 1].quantity = newNumber 
+    
+    pass
 def menu():
     load_list_items()
 
     while True:
         #TODO update item quantity
         #TODO remove an item
-        #TODO search inventory
         #TODO view inventory summary
-        print("\n1. Add an item")
-        print("2. Search Inventory")
-        print("3. View Inventory")
-        print("4. Quit")
+        print("1. View Inventory")
+        print("2. Add an item")
+        print("3. Update an item quantity --unfinished")
+        print("4. remove an item --unfinished")
+        print("5. Search Inventory")
+        print("6. view inventory summary --unfinished")
+        print("7. load different inventory -- unfinished")
+        print("8. Quit")
 
         choice = input("Choose an option: ")
 
-        if choice == "1":
+        if choice == "1": #view inventory
+            if io.inventory:
+                for number, x in enumerate(io.inventory, start=1):
+                    print(f"{number}. {x}")
+                    print("----------------------")
+            else:
+                print("List is empty")
+        elif choice == "2": #add an item
             name = input("Item name: ")
             category = input("Item category: ")
             quantity = int(input("Item quantity: "))
@@ -68,13 +88,19 @@ def menu():
             print("Item added.")
             save_list_items()
             print("Items saved.")
-        elif choice == "2":
+        elif choice == "3": #update item quantity
+            update_quantity()        
+        elif choice == "4": #remove an item
+            pass        
+        
+        elif choice == "5": #search inventory
             search_inventory()
             pass
-        elif choice == "3":
-            for x in io.inventory:
-                print(x)
-        elif choice == "4":
+        elif choice == "6": #view inventory summary
+            pass
+        elif choice == "7": #load different inventory
+            pass
+        elif choice == "8": #exit
             break
         else:
             print("Invalid option.")
