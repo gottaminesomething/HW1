@@ -53,19 +53,35 @@ def update_quantity():
         return False
 
     io.inventory[changed - 1].quantity = newNumber 
-    
+
+def remove_item():
+    while True:
+        rm = input("input item entry number or input 'back' to return: ")
+        Irm = int(rm)
+        if rm == "back":
+            print("returning to main menu")
+            return False
+        elif not rm.isdigit():
+            print("please enter a valid task number.")
+        elif Irm < 1 or Irm > len(io.inventory):
+            print("item does not exist.")
+        else:
+            io.inventory.pop(Irm - 1)
+            print("task removed successfully.")
+            return False
     pass
+
+
 def menu():
     load_list_items()
 
     while True:
-        #TODO update item quantity
         #TODO remove an item
         #TODO view inventory summary
         print("1. View Inventory")
         print("2. Add an item")
-        print("3. Update an item quantity --unfinished")
-        print("4. remove an item --unfinished")
+        print("3. Update an item quantity")
+        print("4. remove an item")
         print("5. Search Inventory")
         print("6. view inventory summary --unfinished")
         print("7. load different inventory -- unfinished")
@@ -89,9 +105,11 @@ def menu():
             save_list_items()
             print("Items saved.")
         elif choice == "3": #update item quantity
-            update_quantity()        
+            update_quantity()
+            save_list_items()        
         elif choice == "4": #remove an item
-            pass        
+            remove_item()
+            save_list_items()
         
         elif choice == "5": #search inventory
             search_inventory()

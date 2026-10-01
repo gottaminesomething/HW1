@@ -1,3 +1,3 @@
 hi|test|50
-test|ing|1
+test|ing|100
 resting|ing|55
