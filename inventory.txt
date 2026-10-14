@@ -1,3 +1,6 @@
-hi|test|50
-test|ing|100
-resting|ing|55
+hello|test|1
+Test|ing|50
+low item|yes|5
+lowstock2|yes|4
+1|1|2
+1|1|1
