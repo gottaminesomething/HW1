@@ -12,12 +12,11 @@ def save_list_items():
         for x in io.inventory:
             f.write(x.name + "|" + x.category + "|" + str(x.quantity) + "\n")
 
-def load_list_items(): #TODO add functionality to read off of various inventories - not required, for fun
+def load_list_items():
   with open(inventoryFile) as f:
         print("FILE READ")
 
         for line in f:
-           # line = f.readline()
             parts = line.split("|")
             io.inventory.append(io.item(parts[0],parts[1], int(parts[2])))
 
