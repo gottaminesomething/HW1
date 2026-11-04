@@ -50,19 +50,21 @@ def update_quantity(inventory, changed, newNumber):
     inventory[changed - 1].quantity = newNumber 
 
 def remove_item(inventory, rm):
-    while True:
-        Irm = int(rm)
         if rm == "back":
             print("returning to main menu")
             return False
-        elif not rm.isdigit():
+        if not rm.isdigit():
             print("please enter a valid task number.")
-        elif Irm < 1 or Irm > len(inventory):
-            print("item does not exist.")
-        else:
-            inventory.pop(Irm - 1)
-            print("task removed successfully.")
             return False
+        
+        Irm = int(rm)
+        if Irm < 1 or Irm > len(inventory):
+            print("item does not exist.")
+            return False
+        
+        inventory.pop(Irm - 1)
+        print("task removed successfully.")
+        return True
 
 def inventory_summary(inventory):
     print("Inventory Summary")
@@ -129,8 +131,13 @@ def menu(inventory):
             save_list_items(inventory)        
         
         elif choice == "4": #remove an item
-            rm = input("input item entry number or input 'back' to return: ")
-            remove_item(inventory, rm)
+            while True:
+                rm = input("input item entry number or input 'back' to return: ")
+                if rm == "back":
+                    break
+
+                if remove_item(inventory, rm):
+                    break
             save_list_items(inventory)
         
         elif choice == "5": #search inventory
