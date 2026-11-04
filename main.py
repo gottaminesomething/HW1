@@ -22,19 +22,15 @@ def load_list_items(inventory, filename=inventoryFile):
             inventory.append(io.item(parts[0],parts[1], int(parts[2])))
 
 def search_inventory(inventory, obType, search):
-    print("1. Name\n" \
-    "2. Category\n" \
-    "3. Quantity")
-
     if obType == "1": #name
         close_matches = difflib.get_close_matches(search, [item.name for item in inventory])
-        print(close_matches)
+        return(close_matches)
     elif obType == "2": #Category
         close_matches = difflib.get_close_matches(search, [item.category for item in inventory])
-        print(close_matches)
+        return(close_matches)
     elif obType == "3": #Quantity
-        close_matches = difflib.get_close_matches(search, [item.quantity for item in inventory])
-        print(close_matches)
+        close_matches = difflib.get_close_matches(search, [str(item.quantity) for item in inventory])
+        return(close_matches)
     else:
         print("Invalid option.")
 
@@ -138,9 +134,12 @@ def menu(inventory):
             save_list_items(inventory)
         
         elif choice == "5": #search inventory
+            print("1. Name\n" \
+                "2. Category\n" \
+                "3. Quantity")
             obType = input("enter the filter(number 1, 2, or 3): ")
             search = input("Search for: ")
-            search_inventory(inventory, obType, search)
+            print(search_inventory(inventory, obType, search))
         elif choice == "6": #view inventory summary
             print("----------------------")
             inventory_summary(inventory)
