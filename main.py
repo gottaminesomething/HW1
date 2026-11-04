@@ -5,81 +5,78 @@ from pathlib import Path
 inventoryFile = "inventory.txt"
 
 Path(inventoryFile).touch(exist_ok=True)
-def save_list_items():
+def save_list_items(inventory, filename=inventoryFile):
 
-    with open(inventoryFile, "w") as f:
+    with open(filename, "w") as f:
 
-        for x in io.inventory:
+        for x in inventory:
             f.write(x.name + "|" + x.category + "|" + str(x.quantity) + "\n")
 
-def load_list_items():
-  with open(inventoryFile) as f:
+def load_list_items(inventory, filename=inventoryFile):
+  newinv = []
+  with open(filename) as f:
         print("FILE READ")
 
         for line in f:
             parts = line.split("|")
-            io.inventory.append(io.item(parts[0],parts[1], int(parts[2])))
+            inventory.append(io.item(parts[0],parts[1], int(parts[2])))
 
-def search_inventory():
+def search_inventory(inventory, obType, search):
     print("1. Name\n" \
     "2. Category\n" \
     "3. Quantity")
-    obType = input("enter the filter(number 1, 2, or 3): ")
-    search = input("Search for: ")
+
     if obType == "1": #name
-        close_matches = difflib.get_close_matches(search, [item.name for item in io.inventory])
+        close_matches = difflib.get_close_matches(search, [item.name for item in inventory])
         print(close_matches)
     elif obType == "2": #Category
-        close_matches = difflib.get_close_matches(search, [item.category for item in io.inventory])
+        close_matches = difflib.get_close_matches(search, [item.category for item in inventory])
         print(close_matches)
     elif obType == "3": #Quantity
-        close_matches = difflib.get_close_matches(search, [item.quantity for item in io.inventory])
+        close_matches = difflib.get_close_matches(search, [item.quantity for item in inventory])
         print(close_matches)
     else:
         print("Invalid option.")
 
-def update_quantity():
+def update_quantity(inventory, changed, newNumber):
     while True:
-        changed = input("input item entry number: ")
         if changed.isdigit():
             changed = int(changed)
             break
     while True:
-        newNumber = input("input the new quantity: ")
         if newNumber.isdigit():
             newNumber = int(newNumber)
             break
-    if changed < 1 or changed > len(io.inventory):
+    if changed < 1 or changed > len(inventory):
         print("That item number does not exist")
         return False
 
-    io.inventory[changed - 1].quantity = newNumber 
+    inventory[changed - 1].quantity = newNumber 
 
-def remove_item():
+def remove_item(inventory, rm):
     while True:
-        rm = input("input item entry number or input 'back' to return: ")
         Irm = int(rm)
         if rm == "back":
             print("returning to main menu")
             return False
         elif not rm.isdigit():
             print("please enter a valid task number.")
-        elif Irm < 1 or Irm > len(io.inventory):
+        elif Irm < 1 or Irm > len(inventory):
             print("item does not exist.")
         else:
-            io.inventory.pop(Irm - 1)
+            inventory.pop(Irm - 1)
             print("task removed successfully.")
             return False
 
-def inventory_summary():
+def inventory_summary(inventory):
     print("Inventory Summary")
-    print("Unique items: " + str(len(io.inventory)))
+    print("Unique items: " + str(len(inventory)))
     total = 0
     lowStock = 0
     category_dict = {}
-    for i in io.inventory:
+    for i in inventory:
         total +=  i.quantity
-        if i.quantity <= 5:
+        if i.quantity < 5:
             lowStock += 1
         if i.category.lower() not in category_dict:
             category_dict.update({str(i.category.lower()) : 1})
@@ -94,8 +91,8 @@ def inventory_summary():
 
 
 
-def menu():
-    load_list_items()
+def menu(inventory):
+    load_list_items(inventory)
 
     while True:
         print("1. View Inventory")
@@ -109,12 +106,13 @@ def menu():
         choice = input("Choose an option: ")
 
         if choice == "1": #view inventory
-            if io.inventory:
-                for number, x in enumerate(io.inventory, start=1):
+            if inventory:
+                for number, x in enumerate(inventory, start=1):
                     print(f"{number}. {x}")
                     print("----------------------")
             else:
                 print("List is empty")
+   
         elif choice == "2": #add an item
             name = input("Item name: ")
             category = input("Item category: ")
@@ -123,26 +121,34 @@ def menu():
                 if quantity.isdigit():
                     quantity = int(quantity)
                     break
-            io.inventory.append(io.item(name, category, quantity))
+            inventory.append(io.item(name, category, quantity))
             print("Item added.")
-            save_list_items()
+            save_list_items(inventory)
             print("Items saved.")
+       
         elif choice == "3": #update item quantity
-            update_quantity()
-            save_list_items()        
+            changed = input("input item entry number: ")
+            newNumber = input("input the new quantity: ")
+            update_quantity(inventory, changed, newNumber)
+            save_list_items(inventory)        
+        
         elif choice == "4": #remove an item
-            remove_item()
-            save_list_items()
+            rm = input("input item entry number or input 'back' to return: ")
+            remove_item(inventory, rm)
+            save_list_items(inventory)
         
         elif choice == "5": #search inventory
-            search_inventory()
+            obType = input("enter the filter(number 1, 2, or 3): ")
+            search = input("Search for: ")
+            search_inventory(inventory, obType, search)
         elif choice == "6": #view inventory summary
             print("----------------------")
-            inventory_summary()
+            inventory_summary(inventory)
             print("----------------------")
         elif choice == "7": #exit
             break
         else:
             print("Invalid option.")
 
-menu()
+if __name__ == "__main__":
+    menu(io.inventory)

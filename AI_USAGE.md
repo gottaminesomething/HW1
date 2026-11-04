@@ -18,3 +18,23 @@
 | AI use policy and Codex-generated menu | Reviewed the provided AI policy and explained how the generated testing menu fit the permitted uses | Review / documentation assistance |
 | Used Codex to generate a simple command-line menu for testing item creation, saving, and printing during program execution. I reviewed and tested the generated menu before integrating it.
 | Used chatgpt to give me a hint on how to get counts of each category without giving me any code | advice that i should use a dictionary to store the information  | Explain programming concepts
+
+# **homework 2**
+
+| What I asked about | AI assistance received | Policy category |
+|---|---|---|
+| used Codex to change functions in `main.py` from using `io.inventory` to using a paramater called `inventory` | Refactoring simplification | how AI assisted with testing or refactoring.
+**prompt**
+in main.py kindly refactor every instance of io.inventory inside a function such as:
+    def save_list_items():
+    with open(inventoryFile, "w") as f:
+        for x in io.inventory:
+            f.write(x.name + "|" + x.category + "|" + str(x.quantity) + "\n")
+
+into being parameter form
+    
+    def save_list_items(inventory):
+    ...
+
+as well as updating the function calls in menu() to not leave any errors from the refactoring.
+ignore test_inventory_manager.py from any edits. do not go above and beyond and change things i did not ask you to change
