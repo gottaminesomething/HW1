@@ -228,3 +228,35 @@ def test_remove_greater_than_list(sample_inventory):
 	remove_item(sample_inventory, "100")
 	# Assert
 	assert [str(i) for i in sample_inventory] == [str(i) for i in expected]
+
+@pytest.mark.parametrize("changed, newNumber, expected", [
+	("1", "5", 5), #valid item
+	("2", "0", 0), #valid item at 0
+	("0", "1", 0), #invalid item
+	("1", "-1", 10) #invalid quantity
+])
+def test_update_quantity(sample_inventory, changed, newNumber, expected):
+		# Act
+	result = update_quantity(sample_inventory, changed, newNumber)
+
+	# Assert
+	if changed =="0":
+		assert result is False
+	elif int(newNumber) < 0:
+		assert result is False
+		assert sample_inventory[0].quantity == 10
+	else:
+		assert sample_inventory[int(changed) - 1].quantity == expected
+
+def test_update_unrelated(sample_inventory):
+	# Arrange
+	expected = [
+		item(name="apple", category="fruit", quantity=5),
+		item(name="hammer", category="tool", quantity=5),
+		item(name="apple", category="fruit", quantity=10),
+		item(name="orange", category="fruit", quantity=15)
+	]
+	# Act
+	update_quantity(sample_inventory, "1", "5")
+	# Assert
+	assert expected == sample_inventory
