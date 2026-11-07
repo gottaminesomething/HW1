@@ -3,4 +3,5 @@ Test|ing|50
 low item|yes|5
 lowstock2|yes|4
 1|1|2
-1|1|1
+truck|vehicle|4
+car|vehicle|1
