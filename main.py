@@ -86,11 +86,36 @@ def inventory_summary(inventory):
 	
 	print("Total quantity: " + str(total))
 	print("Low stock items: " + str(lowStock))
-	print()
+	print() #for new line
 	for key, value in category_dict.items():
 		print(key + ":",value)
 
+def add_item(inventory, name, category, quantity):
+	if name == "":
+		return False
+	elif "|" in name: #find returns -1 if not found (hint for self)
+		return False
 
+	if category == "":
+		return False
+	elif "|" in category:
+			return False
+
+	for i in inventory:
+		if name.casefold() in i.name.casefold():
+			return False
+
+	if quantity.isdigit():
+		quantity = int(quantity)
+	else: return False
+
+	if quantity < 0:
+		print("the quantity cant be less than 0")
+		return False
+	
+	inventory.append(io.item(name, category, quantity))
+	return True
+	
 
 def menu(inventory):
 	load_list_items(inventory)
@@ -115,17 +140,16 @@ def menu(inventory):
 				print("List is empty")
    
 		elif choice == "2": #add an item
-			name = input("Item name: ")
-			category = input("Item category: ")
 			while True:
+				name = input("Item name: ")
+				category = input("Item category: ")
 				quantity = input("Item quantity: ")
-				if quantity.isdigit():
-					quantity = int(quantity)
-					break
-			inventory.append(io.item(name, category, quantity))
-			print("Item added.")
-			save_list_items(inventory)
-			print("Items saved.")
+				if add_item(inventory, name, category, quantity):
+					print("Item added.")
+					save_list_items(inventory)
+					print("Items saved.")
+				else:
+					print("Invalid item.")
 	   
 		elif choice == "3": #update item quantity
 			while True:

@@ -260,3 +260,63 @@ def test_update_unrelated(sample_inventory):
 	update_quantity(sample_inventory, "1", "5")
 	# Assert
 	assert expected == sample_inventory
+
+@pytest.mark.parametrize("Name, Category, Quantity, expected", [
+	("Truck", "Vehicle", "5", 1), #valid   should add
+	("","empty","1", 0), #empty item name #should not add
+	("empty","","1", 0), #empty category #should not add
+	("The |world", "Space", "1", 0), #with | in name #should not add
+	("The world", "Space|", "1", 0), #with | in category #should not add
+	("The world", "Space", "-1", 0), #negative quantity #should not add
+	("apple", "fruit", "1", 0), #duplicate #should not add
+	("Apple", "Fruit", "50", 0), #duplicate with different case #should not add
+
+], ids=[
+	"valid","empty name", "empty category", "| in name", "| in category", 
+	"negative quantity", "duplicate item", "duplicate with different case"
+]
+
+
+)
+def test_add_item(sample_inventory, Name, Category, Quantity, expected):
+	# Arrange
+	expected1 = sample_inventory.copy()
+	if Name == "Truck":
+		expected1.append(item(name="Truck", category="Vehicle", quantity=5))
+	# Act
+	add_item(sample_inventory, Name, Category, Quantity)
+	
+	# Assert
+	assert [(i.name, i.category, i.quantity) for i in sample_inventory] == [(i.name, i.category, i.quantity) for i in expected1]\
+
+
+#tests number of unique items, total quantity, num of low stock, category counts, ignores capitalization
+#an quantity of 5 and 4 are tested to make sure low stock counts
+def test_inventory_Summary(sample_inventory, capsys):
+	# Arrange
+	sample_inventory.append(item(name="Truck", category="Vehicle", quantity=1))
+	# Act
+	inventory_summary(sample_inventory)
+	output = capsys.readouterr().out
+	# Assert
+	assert "Unique items: 5" in output
+	assert "Total quantity: 41" in output
+	assert "Low stock items: 1" in output
+	assert "fruit: 3" in output
+	assert "tool: 1" in output
+	assert "vehicle: 1" in output
+	assert "Vehicle: 1" not in output
+
+#tests empty inventory
+def test_empty_inventory_summary(capsys):
+	# Arrange
+	empty_inventory = []
+	# Act
+	inventory_summary(empty_inventory)
+	output = capsys.readouterr().out
+	# Assert
+	assert "Unique items: 0" in output
+	assert "Total quantity: 0" in output
+	assert "Low stock items: 0" in output
+	
+	
