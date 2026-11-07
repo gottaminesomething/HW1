@@ -148,6 +148,7 @@ def menu(inventory):
 					print("Item added.")
 					save_list_items(inventory)
 					print("Items saved.")
+					break
 				else:
 					print("Invalid item.")
 	   
