@@ -95,9 +95,9 @@ def test_save_then_load_inventory(tmp_path, sample_inventory):
 	("1", "apple", "apple"),
 	("2", "tool", "tool"),
 	("3", "10", "10")
-])
+], ids=["name", "category", "quantity"])
 
-def test_seach_exact_item(sample_inventory, obType, search, expected):
+def test_search_exact_item(sample_inventory, obType, search, expected):
 	# Arrange
 	inventory = sample_inventory
 	# Act
@@ -114,7 +114,7 @@ def test_seach_exact_item(sample_inventory, obType, search, expected):
 	("2", "to", "tool"),
 	("3", "100", "10"),
 	("3", "1", "10")
-])
+], ids=["partial name", "name case", "partial category", "extra digit", "partial quantity"])
 def test_search_partial(sample_inventory, obType, search, expected):
 	# Act
 	result = search_inventory(sample_inventory, obType, search)
@@ -127,7 +127,7 @@ def test_search_partial(sample_inventory, obType, search, expected):
 	("1", "apple", ["apple", "apple"]),
 	("2", "fruit", ["fruit", "fruit", "fruit"]),
 	("3", "10", ["10", "10"])
-])
+], ids=["duplicate names", "duplicate categories", "duplicate quantities"])
 def test_search_duplicates(sample_inventory, obType, search, expected):
 	# Act
 	result = search_inventory(sample_inventory, obType, search)
@@ -141,7 +141,7 @@ def test_search_duplicates(sample_inventory, obType, search, expected):
 	("1", "grape", ["apple", "apple"]),
 	("2", "food", []),
 	("3", "8", [])
-])
+], ids=["no name match", "fuzzy name", "no category match", "no quantity match"])
 def test_search_no_matching_and_fuzzy(sample_inventory, obType, search, expected):
 	# Act
 	result = search_inventory(sample_inventory, obType, search)
@@ -154,7 +154,7 @@ def test_search_no_matching_and_fuzzy(sample_inventory, obType, search, expected
 	("1", "", []),
 	("2", "", []),
 	("3", "", [])
-])
+], ids=["empty name", "empty category", "empty quantity"])
 def test_search_with_whitespace(sample_inventory, obType, search, expected):
 	# Act
 	result = search_inventory(sample_inventory, obType, search)
@@ -234,7 +234,7 @@ def test_remove_greater_than_list(sample_inventory):
 	("2", "0", 0), #valid item at 0
 	("0", "1", 0), #invalid item
 	("1", "-1", 10) #invalid quantity
-])
+], ids=["valid quantity", "zero quantity", "invalid item", "negative quantity"])
 def test_update_quantity(sample_inventory, changed, newNumber, expected):
 		# Act
 	result = update_quantity(sample_inventory, changed, newNumber)

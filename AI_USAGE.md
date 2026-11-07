@@ -98,3 +98,8 @@ test_search_with_whitespace[3--expected2]    PASSED [100%]
 
 23 passed
 ```
+
+
+| What I asked about | AI assistance received | Policy category | prompt|
+|---|---|---|---|
+|asked codex to finish implementing pytest parameterization ids | IDs were created for the remaining parameterizations | AI assisted with testing or refactoring | in test_inventory_manager, implement ids for the remaining parametrize pytest marks, keep them short but related to what they are testing
